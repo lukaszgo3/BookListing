@@ -6,13 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 
 
 public class BooksAdapter extends RecyclerView.Adapter {
 
     private ArrayList<Books> mBooks = new ArrayList<>();
+    MainActivity mActivity;
 
     private class ViewHolder extends RecyclerView.ViewHolder {
         ImageView image;
@@ -28,8 +28,10 @@ public class BooksAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public BooksAdapter(ArrayList<Books> books) {
+    public BooksAdapter(MainActivity activity, ArrayList<Books> books) {
+
         this.mBooks = books;
+        this.mActivity = activity;
     }
 
     @Override
@@ -43,11 +45,17 @@ public class BooksAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        Books books = mBooks.get(position);
-        ((ViewHolder)holder).image.setImageResource(books.getmImage());
+        final Books books = mBooks.get(position);
+       // ((ViewHolder)holder).image.setImageResource(Integer.parseInt(books.getmImage()));
         ((ViewHolder)holder).tittle.setText(books.getmTittle());
         ((ViewHolder)holder).author.setText(books.getmAuthor());
-
+        ((ViewHolder)holder).tittle.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                mActivity.showDetailsDialog(books.getmDescription());
+                return true;
+            }
+        });
 
     }
 

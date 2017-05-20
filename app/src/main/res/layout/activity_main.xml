@@ -6,12 +6,30 @@
     android:orientation="vertical"
     tools:context="com.example.android.booklisting.MainActivity">
 
-    <SearchView
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <EditText
+        android:id="@+id/editId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp">
+        android:hint="fghgfhfghfghfh"
+        android:layout_margin="16dp"/>
 
-    </SearchView>
+    <ImageView
+        android:id="@+id/search"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignBottom="@id/editId"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="24dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_search"/>
+    </RelativeLayout>
+
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
@@ -19,6 +37,14 @@
         android:scrollbars="vertical"
         android:id="@+id/list_books">
     </android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/state_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:visibility="gone"/>
 
     <ProgressBar
         android:paddingTop="30dp"
