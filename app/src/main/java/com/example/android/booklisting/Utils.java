@@ -18,7 +18,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 
-public class Utils {
+class Utils {
 
     public Utils() {
     }
@@ -37,8 +37,7 @@ public class Utils {
             Log.e(LOG_TAG, "Error", e);
         }
 
-        ArrayList<Books> books = fromJson(jsonResponse);
-        return books;
+        return fromJson(jsonResponse);
     }
 
     private static URL createUrl(String stringUrl) {
@@ -68,16 +67,17 @@ public class Utils {
                     JSONObject vInfo = book.getJSONObject("volumeInfo");
                     JSONObject image = vInfo.getJSONObject("imageLinks");
                     String tittle = vInfo.getString("title");
-                    String thumbnail;
+
+                    String images;
 
                     if (image.has("thumbnail")) {
-                        thumbnail = image.getString("thumbnail");
+                        images = image.getString("thumbnail");
                     } else {
-                        thumbnail = "No Image";
+                        images = "No Image";
                     }
 
-                    JSONArray authorsArr = null;
-                    ArrayList<String> author = new ArrayList<String>();
+                    JSONArray authorsArr;
+                    ArrayList<String> author = new ArrayList<>();
 
                     if (vInfo.has("authors")) {
                         authorsArr = vInfo.getJSONArray("authors");
@@ -96,7 +96,7 @@ public class Utils {
                         description = "No description.";
                     }
 
-                    Books booksNew = new Books(thumbnail, tittle, author, description);
+                    Books booksNew = new Books(images, tittle, author, description);
                     books.add(booksNew);
                 }
             }
