@@ -1,5 +1,6 @@
 package com.example.android.booklisting;
 
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,7 +47,7 @@ public class BooksAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         final Books books = mBooks.get(position);
-       // ((ViewHolder)holder).image.setImageResource(Integer.parseInt(books.getmImage()));
+        ((ViewHolder)holder).image.setImageDrawable(Drawable.createFromPath(books.getmImage()));
         ((ViewHolder)holder).tittle.setText(books.getmTittle());
         ((ViewHolder)holder).author.setText(books.getmAuthor());
         ((ViewHolder)holder).tittle.setOnLongClickListener(new View.OnLongClickListener() {
