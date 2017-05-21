@@ -1,5 +1,6 @@
 package com.example.android.booklisting;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,8 +13,10 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-
 class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.ViewHolder> {
+
+    private final static String DATE = "Date: ";
+    private final static String PAGES = "Pages: ";
 
     private ArrayList<Books> mBooks = new ArrayList<>();
     private Context mContext;
@@ -28,9 +31,11 @@ class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View listBooks = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_book, parent, false);
+
         return new ViewHolder(listBooks);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
 
@@ -39,7 +44,8 @@ class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.ViewHolder> {
         Picasso.with(mContext).load(books.getmImage()).into(viewHolder.image);
         viewHolder.tittle.setText(books.getmTittle());
         viewHolder.author.setText(books.getmAuthor());
-        viewHolder.publishedDate.setText(books.getMpublishedDate());
+        viewHolder.pages.setText(PAGES + books.getmPages());
+        viewHolder.publishedDate.setText(DATE + books.getMpublishedDate());
     }
 
     @Override
@@ -50,8 +56,10 @@ class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.ViewHolder> {
     class ViewHolder extends RecyclerView.ViewHolder {
         ImageView image;
         TextView tittle;
-        TextView publishedDate;
         TextView author;
+        TextView pages;
+        TextView publishedDate;
+
 
         ViewHolder(View view) {
             super(view);
@@ -59,6 +67,7 @@ class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.ViewHolder> {
             image = (ImageView) view.findViewById(R.id.imageId);
             tittle = (TextView) view.findViewById(R.id.tittleId);
             author = (TextView) view.findViewById(R.id.authorId);
+            pages = (TextView) view.findViewById(R.id.pagesId);
             publishedDate = (TextView) view.findViewById(R.id.publishedDateId);
         }
     }

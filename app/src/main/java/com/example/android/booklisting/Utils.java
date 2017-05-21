@@ -1,5 +1,6 @@
 package com.example.android.booklisting;
 
+import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -19,27 +20,30 @@ import java.util.ArrayList;
 
 
 class Utils {
+    private static final String LOG_TAG = Utils.class.getSimpleName();
 
     public Utils() {
     }
 
-    private static final String LOG_TAG = Utils.class.getSimpleName();
+    static ArrayList<Books> booksLog(Context context, String urlReq) {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-    static ArrayList<Books> booksLog(String urlReq) {
-
-        URL url = createUrl(urlReq);
+        URL url = createUrl(context, urlReq);
 
         String jsonResponse = null;
         try {
-            jsonResponse = makeHttpRequest(url);
+            jsonResponse = makeHttpRequest(context,url);
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Error", e);
+            Log.e(LOG_TAG, "Error Json http", e);
         }
-
-        return fromJson(jsonResponse);
+        return fromJson(context, jsonResponse);
     }
 
-    private static URL createUrl(String stringUrl) {
+    private static URL createUrl(Context context, String stringUrl) {
         URL url = null;
         try {
             url = new URL(stringUrl);
@@ -49,12 +53,12 @@ class Utils {
         return url;
     }
 
-    private static ArrayList<Books> fromJson(String jsonBooks) {
+    private static ArrayList<Books> fromJson(Context context, String jsonBooks) {
         if (TextUtils.isEmpty(jsonBooks)) {
             return null;
         }
-
         ArrayList<Books> books = new ArrayList<>();
+
         try {
             JSONObject respJson = new JSONObject(jsonBooks);
             if (respJson.has("items")) {
@@ -65,30 +69,50 @@ class Utils {
                     JSONObject book = booksArray.getJSONObject(j);
                     JSONObject vInfo = book.getJSONObject("volumeInfo");
                     JSONObject image = vInfo.getJSONObject("imageLinks");
-                    String tittle = vInfo.getString("title");
-                    String publishedDate = vInfo.getString("publishedDate");
 
+                    //Book's image
                     String images;
-
                     if (image.has("thumbnail")) {
                         images = image.getString("thumbnail");
                     } else {
-                        images = "No Image";
+                        images = "Images not found";
+                    }
+                    //Book's Title
+                    String title;
+                    if (vInfo.has("title")) {
+                        title = vInfo.getString("title");
+                    } else {
+                        title = "Pages not available";
                     }
 
+                    //Book's Author
                     JSONArray authorsArr;
                     ArrayList<String> author = new ArrayList<>();
-
                     if (vInfo.has("authors")) {
                         authorsArr = vInfo.getJSONArray("authors");
                         for (int i = 0; i < authorsArr.length(); i++) {
                             author.add(authorsArr.getString(i));
                         }
                     } else {
-                        author.add("Unknown name");
+                        author.add("Author not found");
+                    }
+                    //Book's Pages
+                    String pages;
+                    if (vInfo.has("pageCount")) {
+                        pages = vInfo.getString("pageCount");
+                    } else {
+                        pages = "Pages not available";
                     }
 
-                    Books booksNew = new Books(images, tittle, publishedDate, author);
+                    //Book's Date
+                    String date;
+                    if (vInfo.has("publishedDate")) {
+                        date = vInfo.getString("publishedDate");
+                    } else {
+                        date = "Date not available";
+                    }
+
+                    Books booksNew = new Books(images, title, pages, date, author);
                     books.add(booksNew);
                 }
             }
@@ -98,7 +122,7 @@ class Utils {
         return books;
     }
 
-    private static String makeHttpRequest(URL url) throws IOException {
+    private static String makeHttpRequest(Context context, URL url) throws IOException {
         String jsonResponse = "";
         if (url == null) {
             return jsonResponse;
@@ -115,12 +139,12 @@ class Utils {
 
             if (urlConnection.getResponseCode() == 200) {
                 inputStream = urlConnection.getInputStream();
-                jsonResponse = readFromStream(inputStream);
+                jsonResponse = readFromStream(context, inputStream);
             } else {
-                Log.e(LOG_TAG, "Error response code: " + urlConnection.getResponseCode());
+                Log.e(LOG_TAG, "Error response: " + urlConnection.getResponseCode());
             }
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Problem retrieving the book JSON results.", e);
+            Log.e(LOG_TAG, "Problem retrieving the books.", e);
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -132,7 +156,7 @@ class Utils {
         return jsonResponse;
     }
 
-    private static String readFromStream(InputStream inputStream) throws IOException {
+    private static String readFromStream(Context context, InputStream inputStream) throws IOException {
         StringBuilder output = new StringBuilder();
         if (inputStream != null) {
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
@@ -146,6 +170,4 @@ class Utils {
         return output.toString();
     }
 
-
 }
-

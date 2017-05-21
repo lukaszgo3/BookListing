@@ -41,6 +41,13 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:textSize="17sp" />
+            <TextView
+                android:id="@+id/pagesId"
+                android:textStyle="italic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/publishedDateId"
