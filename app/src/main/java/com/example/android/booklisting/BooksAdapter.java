@@ -39,13 +39,6 @@ class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.ViewHolder> {
         Picasso.with(mContext).load(books.getmImage()).into(viewHolder.image);
         viewHolder.tittle.setText(books.getmTittle());
         viewHolder.author.setText(books.getmAuthor());
-        viewHolder.tittle.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                mActivity.showDetailsDialog(books.getmDescription());
-                return true;
-            }
-        });
     }
 
     @Override
@@ -61,7 +54,7 @@ class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.ViewHolder> {
         ViewHolder(View view) {
             super(view);
 
-            this.image = (ImageView) view.findViewById(R.id.imageId);
+            image = (ImageView) view.findViewById(R.id.imageId);
             tittle = (TextView) view.findViewById(R.id.tittleId);
             author = (TextView) view.findViewById(R.id.authorId);
         }

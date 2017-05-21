@@ -85,7 +85,7 @@ class Utils {
                             author.add(authorsArr.getString(i));
                         }
                     } else {
-                        author.add("Unknow name");
+                        author.add("Unknown name");
                     }
 
                     String description;
