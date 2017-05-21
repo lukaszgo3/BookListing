@@ -23,7 +23,6 @@ class Utils {
     public Utils() {
     }
 
-
     private static final String LOG_TAG = Utils.class.getSimpleName();
 
     static ArrayList<Books> booksLog(String urlReq) {
@@ -67,6 +66,7 @@ class Utils {
                     JSONObject vInfo = book.getJSONObject("volumeInfo");
                     JSONObject image = vInfo.getJSONObject("imageLinks");
                     String tittle = vInfo.getString("title");
+                    String publishedDate = vInfo.getString("publishedDate");
 
                     String images;
 
@@ -88,15 +88,7 @@ class Utils {
                         author.add("Unknown name");
                     }
 
-                    String description;
-
-                    if (vInfo.has("description")) {
-                        description = vInfo.getString("description");
-                    } else {
-                        description = "No description.";
-                    }
-
-                    Books booksNew = new Books(images, tittle, author, description);
+                    Books booksNew = new Books(images, tittle, publishedDate, author);
                     books.add(booksNew);
                 }
             }

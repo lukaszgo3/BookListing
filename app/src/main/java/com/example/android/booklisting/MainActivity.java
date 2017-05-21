@@ -26,14 +26,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter recyclerAdapter;
-    private boolean isClick;
+    private boolean isClicked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        isClick = false;
+        isClicked = false;
 
         recyclerView = (RecyclerView) findViewById(R.id.list_books);
         recyclerView.setHasFixedSize(true);
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             @Override
             public void onClick(View v) {
 
-                isClick = true;
+                isClicked = true;
 
                 NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
                 final boolean isConnected = activeNetwork != null &&
@@ -91,7 +91,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                     state.setText(getString(R.string.Test1));
                     state.setVisibility(View.VISIBLE);
                 }
-
             }
         });
     }
@@ -132,10 +131,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             recyclerAdapter = new BooksAdapter(MainActivity.this, (ArrayList<Books>) books);
             recyclerView.setAdapter(recyclerAdapter);
         } else {
-            if (isClick) {
+            if (isClicked) {
                 Toast.makeText(MainActivity.this, "Not Found!", Toast.LENGTH_SHORT).show();
             }
-
         }
     }
 
@@ -143,6 +141,5 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public void onLoaderReset(android.content.Loader<List<Books>> loader) {
         recyclerAdapter = new BooksAdapter(MainActivity.this, new ArrayList<Books>());
     }
-
 }
 

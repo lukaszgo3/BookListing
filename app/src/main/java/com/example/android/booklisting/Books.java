@@ -6,15 +6,15 @@ class Books {
 
     private String mImage;
     private String mTittle;
+    private String mpublishedDate;
     private ArrayList<String> mAuthor;
-    private String mDescription;
 
-    Books(String image, String tittle, ArrayList<String> author, String description) {
+    Books(String image, String tittle, String publishedDate, ArrayList<String> author) {
 
         mImage = image;
         mTittle = tittle;
+        mpublishedDate = publishedDate;
         mAuthor = author;
-        mDescription = description;
     }
 
     String getmImage() {
@@ -25,12 +25,12 @@ class Books {
         return mTittle;
     }
 
-    String getmAuthor() {
-        return Authors();
+    String getMpublishedDate() {
+        return mpublishedDate;
     }
 
-    String getmDescription() {
-        return mDescription;
+    String getmAuthor() {
+        return Authors();
     }
 
     private String Authors() {

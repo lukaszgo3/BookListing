@@ -39,6 +39,7 @@ class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.ViewHolder> {
         Picasso.with(mContext).load(books.getmImage()).into(viewHolder.image);
         viewHolder.tittle.setText(books.getmTittle());
         viewHolder.author.setText(books.getmAuthor());
+        viewHolder.publishedDate.setText(books.getMpublishedDate());
     }
 
     @Override
@@ -49,6 +50,7 @@ class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.ViewHolder> {
     class ViewHolder extends RecyclerView.ViewHolder {
         ImageView image;
         TextView tittle;
+        TextView publishedDate;
         TextView author;
 
         ViewHolder(View view) {
@@ -57,6 +59,7 @@ class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.ViewHolder> {
             image = (ImageView) view.findViewById(R.id.imageId);
             tittle = (TextView) view.findViewById(R.id.tittleId);
             author = (TextView) view.findViewById(R.id.authorId);
+            publishedDate = (TextView) view.findViewById(R.id.publishedDateId);
         }
     }
 }
