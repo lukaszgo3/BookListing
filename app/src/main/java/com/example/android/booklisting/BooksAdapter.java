@@ -3,6 +3,7 @@ package com.example.android.booklisting;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,7 +61,6 @@ class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.ViewHolder> {
         TextView pages;
         TextView publishedDate;
 
-
         ViewHolder(View view) {
             super(view);
 
@@ -69,6 +69,9 @@ class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.ViewHolder> {
             author = (TextView) view.findViewById(R.id.authorId);
             pages = (TextView) view.findViewById(R.id.pagesId);
             publishedDate = (TextView) view.findViewById(R.id.publishedDateId);
+
+            pages.setGravity(Gravity.BOTTOM);
+            publishedDate.setGravity(Gravity.BOTTOM);
         }
     }
 }

@@ -9,13 +9,15 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<Books>> {
@@ -23,56 +25,52 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private static final String GOOGLE_BOOKS_URL = "https://www.googleapis.com/books/v1/volumes?q=";
     private static final int BOOK_ID = 1;
 
-    private RecyclerView recyclerView;
     private RecyclerView.Adapter recyclerAdapter;
-    private boolean isClicked;
+    private RecyclerView recyclerView;
+    private boolean clicked;
+    ProgressBar spinner;
+    EditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        isClicked = false;
-
+        clicked = false;
+        recyclerAdapter = new BooksAdapter(MainActivity.this, new ArrayList<Books>());
         recyclerView = (RecyclerView) findViewById(R.id.list_books);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        recyclerView.setAdapter(new BooksAdapter(MainActivity.this, new ArrayList<Books>()));
+        recyclerView.setAdapter(recyclerAdapter);
 
-        final EditText searchView = (EditText) findViewById(R.id.editId);
-        if (!TextUtils.isEmpty(searchView.getText().toString().trim())) {
-            infoUp();
-        }
+        editText = (EditText) findViewById(R.id.editId);
+        spinner = (ProgressBar) findViewById(R.id.spiner);
 
-        ProgressBar spinner = (ProgressBar) findViewById(R.id.spiner);
-        spinner.setVisibility(View.GONE);
-
-        final ConnectivityManager cm =
-                (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        LoaderManager loaderManager = getLoaderManager();
+        loaderManager.initLoader(BOOK_ID, null, this);
 
         //Search button/lens
         ImageView search = (ImageView) findViewById(R.id.search);
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                isClicked = true;
-
+                ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-                final boolean isConnected = activeNetwork != null &&
-                        activeNetwork.isConnectedOrConnecting();
-                if (isConnected) {
-                    recyclerAdapter = new BooksAdapter(MainActivity.this, new ArrayList<Books>());
-                    recyclerView.setAdapter(recyclerAdapter);
+                clicked = true;
 
-                    if (!TextUtils.isEmpty(searchView.getText().toString().trim())) {
-                        infoUp();
-                    } else {
+                if (activeNetwork != null && activeNetwork.isConnected()) {
+
+                    if (editText.getText().toString().equals("")) {
                         Toast.makeText(MainActivity.this, getString(R.string.Test1), Toast.LENGTH_SHORT).show();
+                    }
+
+                    getLoaderManager().restartLoader(BOOK_ID, null, MainActivity.this);
+                    if (v != null) {
+                        InputMethodManager iMn = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        iMn.hideSoftInputFromWindow(v.getWindowToken(), 0);
                         recyclerView.setVisibility(View.GONE);
                     }
                 } else {
-                    ProgressBar spinner = (ProgressBar) findViewById(R.id.spiner);
                     spinner.setVisibility(View.GONE);
                     recyclerView.setVisibility(View.GONE);
                     Toast.makeText(MainActivity.this, R.string.noInternet, Toast.LENGTH_LONG).show();
@@ -81,43 +79,33 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         });
     }
 
-    private void infoUp() {
-        EditText bookName = (EditText) findViewById(R.id.editId);
-        String title = bookName.getText().toString();
-        title = title.replace(" ", "+");
-        String uriString = GOOGLE_BOOKS_URL + title;
-        Bundle args = new Bundle();
-        args.putString("Uri", uriString);
-        android.app.LoaderManager loaderManager = getLoaderManager();
-        loaderManager.initLoader(BOOK_ID, args, MainActivity.this);
-        if (loaderManager.getLoader(BOOK_ID).isStarted()) {
-            //restart it if there's one
-            getLoaderManager().restartLoader(BOOK_ID, args, MainActivity.this);
-        }
-    }
-
     @Override
     public Loader<ArrayList<Books>> onCreateLoader(int id, Bundle args) {
-        recyclerView.setVisibility(View.GONE);
 
-        ProgressBar loadingSpinner = (ProgressBar) findViewById(R.id.spiner);
-        loadingSpinner.setVisibility(View.VISIBLE);
-        return new BookAsyncTask(getApplicationContext(), args.getString("Uri"));
+        recyclerView.setVisibility(View.GONE);
+        spinner.setVisibility(View.VISIBLE);
+
+        String editBooks = editText.getText().toString();
+        try {
+            editBooks = URLEncoder.encode(editBooks, "UTF-8");
+        } catch (IOException e) {
+            editBooks = "";
+        }
+        String url = GOOGLE_BOOKS_URL + editBooks + "&maxResults=15";
+
+        return new BookLoad(MainActivity.this, url);
     }
 
     @Override
     public void onLoadFinished(Loader<ArrayList<Books>> loader, ArrayList<Books> books) {
 
-        ProgressBar spiner= (ProgressBar) findViewById(R.id.spiner);
-        spiner.setVisibility(View.GONE);
-
+        spinner.setVisibility(View.GONE);
         recyclerView.setVisibility(View.VISIBLE);
-        recyclerAdapter = new BooksAdapter(MainActivity.this, new ArrayList<Books>());
         if (books != null && !books.isEmpty()) {
             recyclerAdapter = new BooksAdapter(MainActivity.this, books);
             recyclerView.setAdapter(recyclerAdapter);
         } else {
-            if (isClicked) {
+            if (clicked) {
                 Toast.makeText(MainActivity.this, "Book " +
                         "Not Found!", Toast.LENGTH_SHORT).show();
             }

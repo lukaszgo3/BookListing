@@ -12,18 +12,18 @@
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp">
 
             <ImageView
                 android:id="@+id/imageId"
                 android:layout_width="130dp"
-                android:layout_height="200dp"
-                android:padding="5dp" />
+                android:layout_height="200dp" />
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <TextView
@@ -31,11 +31,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
+                android:layout_alignParentTop="true"
                 android:textSize="20sp"
                 android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/authorId"
+                android:layout_below="@id/tittleId"
                 android:textStyle="italic"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -43,7 +45,7 @@
                 android:textSize="17sp" />
             <TextView
                 android:id="@+id/pagesId"
-                android:textStyle="italic"
+                android:layout_below="@id/authorId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
@@ -53,10 +55,11 @@
                 android:id="@+id/publishedDateId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
                 android:padding="5dp"
                 android:textSize="15sp" />
 
-        </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 
 </android.support.v7.widget.CardView>

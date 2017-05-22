@@ -36,7 +36,7 @@ class Utils {
 
         String jsonResponse = null;
         try {
-            jsonResponse = makeHttpRequest(context,url);
+            jsonResponse = makeHttpRequest(context, url);
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error Json http", e);
         }
@@ -169,5 +169,4 @@ class Utils {
         }
         return output.toString();
     }
-
 }

@@ -5,18 +5,17 @@ import android.content.Context;
 
 import java.util.ArrayList;
 
-class BookAsyncTask extends AsyncTaskLoader<ArrayList<Books>> {
+class BookLoad extends AsyncTaskLoader<ArrayList<Books>> {
 
     private final String mUrl;
 
-    BookAsyncTask(Context context, String url) {
+    BookLoad(Context context, String url) {
         super(context);
-        this.mUrl = url;
+        mUrl = url;
     }
 
     @Override
     protected void onStartLoading() {
-
         forceLoad();
     }
 
@@ -25,6 +24,6 @@ class BookAsyncTask extends AsyncTaskLoader<ArrayList<Books>> {
         if (mUrl == null) {
             return null;
         }
-        return Utils.booksLog(getContext(),mUrl);
+        return Utils.booksLog(getContext(), mUrl);
     }
 }

@@ -3,4 +3,5 @@
     <string name="Test1">Test 1 text</string>
     <string name="Test12">Test 122231313 text</string>
     <string name="noInternet">You are not connected!</string>
+    <string name="title">Enter title or author</string>
 </resources>
