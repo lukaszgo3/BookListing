@@ -143,6 +143,7 @@ class Utils {
             } else {
                 Log.e(LOG_TAG, "Error response: " + urlConnection.getResponseCode());
             }
+
         } catch (IOException e) {
             Log.e(LOG_TAG, "Problem retrieving the books.", e);
         } finally {

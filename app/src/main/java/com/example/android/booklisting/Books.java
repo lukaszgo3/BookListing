@@ -27,7 +27,7 @@ class Books {
         return mTittle;
     }
 
-    public String getmPages() {
+    String getmPages() {
         return mPages;
     }
 
@@ -43,7 +43,7 @@ class Books {
         String authors = mAuthor.get(0);
         if (mAuthor.size() > 1) {
             for (int j = 1; j < mAuthor.size(); j++) {
-                authors += mAuthor.get(j) + "\n";
+                authors += "\n" + mAuthor.get(j);
             }
         }
         return authors;

@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 if (activeNetwork != null && activeNetwork.isConnected()) {
 
                     if (editText.getText().toString().equals("")) {
-                        Toast.makeText(MainActivity.this, getString(R.string.Test1), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "ok", Toast.LENGTH_SHORT).show();
                     }
 
                     getLoaderManager().restartLoader(BOOK_ID, null, MainActivity.this);
